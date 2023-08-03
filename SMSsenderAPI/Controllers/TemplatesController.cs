@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SMSsenderAPI.Data;
 using SMSsenderAPI.Models;
+using SMSsenderAPI.Services;
 
 namespace SMSsenderAPI.Controllers
 {
@@ -10,31 +9,55 @@ namespace SMSsenderAPI.Controllers
     [ApiController]
     public class TemplatesController : ControllerBase
     {
-        private readonly DataContext dbContext;
-        public TemplatesController(DataContext dbContext)
+        private readonly ITemplateService _templateService;
+
+        public TemplatesController(ITemplateService templateService)
         {
-            this.dbContext = dbContext;
+            _templateService = templateService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTemplate()
+        public async Task<ActionResult<List<Template>>> GetAllTemplate()
         {
-            return Ok(await dbContext.Templates.ToListAsync());
+            return await _templateService.GetAllTemplate();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Sms>> GetSingleTemplate(int id)
+        {
+            var result = await _templateService.GetSingleTemplate(id);
+            if (result is null)
+                return NotFound("Template not found.");
+
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTemplate(AddTemplateRequest addTemplateRequest)
+        public async Task<ActionResult<List<Sms>>> AddTemplate(Template template)
         {
-            var template = new Template()
-            {
-                Name = addTemplateRequest.Name,
-                Text = addTemplateRequest.Text,
-            };
+            var result = await _templateService.AddTemplate(template);
+            return Ok(result);
+        }
 
-            await dbContext.Templates.AddAsync(template);
-            await dbContext.SaveChangesAsync();
+        [HttpPut("{id}")]
+        public async Task<ActionResult<List<Template>>> UpdateTemplate(int id, Template request)
+        {
+            var result = await _templateService.UpdateTemplate(id, request);
+            if (result is null)
+                return NotFound("Template not found.");
 
-            return Ok(template);
+            return Ok(result);
+        }
+
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<List<Template>>> DeleteTemplate(int id)
+        {
+            var result = await _templateService.DeleteTemplate(id);
+            if (result is null)
+                return NotFound("Template not found.");
+
+            return Ok(result);
         }
     }
 }

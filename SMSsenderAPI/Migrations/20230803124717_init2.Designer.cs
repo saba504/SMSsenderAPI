@@ -12,8 +12,8 @@ using SMSsenderAPI.Data;
 namespace SMSsenderAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230802105039_init")]
-    partial class init
+    [Migration("20230803124717_init2")]
+    partial class init2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

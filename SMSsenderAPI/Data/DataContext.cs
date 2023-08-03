@@ -9,6 +9,13 @@ namespace SMSsenderAPI.Data
         {
         }
 
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+
+        }
+
+
         public DbSet<Sms> Smses { get; set; }
         public DbSet<Template> Templates { get; set; }
     }
