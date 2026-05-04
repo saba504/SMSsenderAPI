@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using SMSsenderAPI.Data;
+using SMSsenderAPI.Models;
 using SMSsenderAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +17,17 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ISmsService, SmsService>();
 builder.Services.AddScoped<ITemplateService, TemplateService>();
 builder.Services.AddDbContext<DataContext>();
+
+builder.Services.Configure<EvaluationApiOptions>(
+    builder.Configuration.GetSection("EvaluationApi"));
+
+builder.Services.AddHttpClient<IEvaluationService, EvaluationService>((sp, client) =>
+{
+    var options = sp.GetRequiredService<IOptions<EvaluationApiOptions>>().Value;
+
+    client.BaseAddress = new Uri(options.BaseUrl);
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
 
 var app = builder.Build();
 
