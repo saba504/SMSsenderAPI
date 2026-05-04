@@ -53,8 +53,7 @@ namespace SMSsenderAPI.Services
             var sms = await _context.Smses.FindAsync(id);
             if (sms is null)
                 return null;
-
-            sms.Name = request.Name;
+             
             sms.Text = request.Text;
             sms.Author = request.Author;
             sms.PhoneNumber = request.PhoneNumber;
