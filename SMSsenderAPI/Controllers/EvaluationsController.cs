@@ -34,7 +34,7 @@ namespace SMSsenderAPI.Controllers
             return Ok(new { Id = evaluationId });
         }
 
-        [HttpGet("{applicationId}/evaluations")]
+        [HttpGet("evaluations")]
         public async Task<IActionResult> GetEvaluations(
             string applicationId,
             [FromQuery] string? applicationType,
