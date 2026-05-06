@@ -32,7 +32,7 @@ builder.Services.AddHttpClient<IEvaluationService, EvaluationService>((sp, clien
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (builder.Configuration.GetValue<Boolean>("ShowSwagger"))
 {
     app.UseSwagger();
     app.UseSwaggerUI();
