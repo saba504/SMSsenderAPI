@@ -16,8 +16,7 @@ namespace SMSsenderAPI.Controllers
         }
 
         [HttpPost("evaluations")]
-        public async Task<IActionResult> CreateEvaluation(
-            string applicationId,
+        public async Task<IActionResult> CreateEvaluation( 
             [FromBody] CreateEvaluationRequestDto request,
             CancellationToken cancellationToken)
         {
