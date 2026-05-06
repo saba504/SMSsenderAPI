@@ -4,7 +4,7 @@ namespace SMSsenderAPI.Services
 {
     public interface ISmsService
     {
-        Task<List<Sms>> GetAllSms();
+        Task<(List<Sms> Data, int TotalCount)> GetAllSms(int pageNumber, int pageSize);
         Task<Sms?> GetSingleSms(int id);
         Task<List<Sms>> AddSms(Sms sms);
         Task<List<Sms>?> UpdateSms(int id, Sms request);

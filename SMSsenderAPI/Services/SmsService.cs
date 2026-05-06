@@ -33,10 +33,19 @@ namespace SMSsenderAPI.Services
         }
 
 
-        public async Task<List<Sms>> GetAllSms()
+        public async Task<(List<Sms> Data, int TotalCount)> GetAllSms(int pageNumber, int pageSize)
         {
-            var smses = await _context.Smses.ToListAsync();
-            return smses;
+            var query = _context.Smses.AsQueryable();
+
+            var totalCount = await query.CountAsync();
+
+            var data = await query
+                .OrderBy(s => s.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (data, totalCount);
         }
 
         public async Task<Sms?> GetSingleSms(int id)

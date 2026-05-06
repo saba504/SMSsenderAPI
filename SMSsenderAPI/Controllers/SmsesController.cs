@@ -18,9 +18,20 @@ namespace SMSsenderAPI.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<List<Sms>>> GetAllHeroes()
+        public async Task<ActionResult<List<Sms>>> GetAllHeroes(int pageNumber = 1, int pageSize = 10)
         {
-            return await _smsService.GetAllSms();
+            if (pageNumber < 1 || pageSize < 1)
+                return BadRequest("Invalid pagination parameters");
+
+            var (data, totalCount) = await _smsService.GetAllSms(pageNumber, pageSize);
+
+            return Ok(new
+            {
+                Data = data,
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            });
         }
 
         [HttpGet("{id}")]
