@@ -12,15 +12,15 @@ using SMSsenderAPI.Data;
 namespace SMSsenderAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230803124030_init")]
-    partial class init
+    [Migration("20231019133053_MyMigration7")]
+    partial class MyMigration7
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.9")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -40,11 +40,27 @@ namespace SMSsenderAPI.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNumber")
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Smses");
+                });
+
+            modelBuilder.Entity("SMSsenderAPI.Models.Template", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -54,7 +70,7 @@ namespace SMSsenderAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Smses");
+                    b.ToTable("Templates");
                 });
 #pragma warning restore 612, 618
         }

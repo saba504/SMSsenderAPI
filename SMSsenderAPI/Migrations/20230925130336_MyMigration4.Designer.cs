@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SMSsenderAPI.Data;
 
@@ -11,9 +12,11 @@ using SMSsenderAPI.Data;
 namespace SMSsenderAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230925130336_MyMigration4")]
+    partial class MyMigration4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,8 +42,7 @@ namespace SMSsenderAPI.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasMaxLength(9)
-                        .HasColumnType("nvarchar(9)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
@@ -48,6 +50,29 @@ namespace SMSsenderAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Smses");
+                });
+
+            modelBuilder.Entity("SMSsenderAPI.Models.Sms2Template", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("SmsId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TemplateId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SmsId");
+
+                    b.HasIndex("TemplateId");
+
+                    b.ToTable("Sms2Template");
                 });
 
             modelBuilder.Entity("SMSsenderAPI.Models.Template", b =>
@@ -71,40 +96,26 @@ namespace SMSsenderAPI.Migrations
                     b.ToTable("Templates");
                 });
 
-            modelBuilder.Entity("SMSsenderAPI.Models.User", b =>
+            modelBuilder.Entity("SMSsenderAPI.Models.Sms2Template", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.HasOne("SMSsenderAPI.Models.Sms", "Sms")
+                        .WithMany("Sms2Templates")
+                        .HasForeignKey("SmsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.HasOne("SMSsenderAPI.Models.Template", "Template")
+                        .WithMany()
+                        .HasForeignKey("TemplateId");
 
-                    b.Property<DateTime>("BirtDate")
-                        .HasColumnType("datetime2");
+                    b.Navigation("Sms");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Navigation("Template");
+                });
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PrivateNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
+            modelBuilder.Entity("SMSsenderAPI.Models.Sms", b =>
+                {
+                    b.Navigation("Sms2Templates");
                 });
 #pragma warning restore 612, 618
         }

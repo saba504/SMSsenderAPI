@@ -1,4 +1,7 @@
-﻿namespace SMSsenderAPI.Models
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
+
+namespace SMSsenderAPI.Models
 {
     public class Template
     {
