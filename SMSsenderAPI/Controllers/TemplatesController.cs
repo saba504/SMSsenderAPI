@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SMSsenderAPI.Models;
 using SMSsenderAPI.Services;
@@ -7,6 +8,7 @@ namespace SMSsenderAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")] //ავტორიზაცია
     public class TemplatesController : ControllerBase
     {
         private readonly ITemplateService _templateService;

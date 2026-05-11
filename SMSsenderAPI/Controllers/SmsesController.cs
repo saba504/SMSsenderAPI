@@ -13,7 +13,7 @@ namespace SMSsenderAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "Admin")] //ავტორიზაცია
+    [Authorize(Roles = "Admin")] //ავტორიზაცია
     public class SmsesController : ControllerBase
     {
         private readonly ISmsService _smsService;

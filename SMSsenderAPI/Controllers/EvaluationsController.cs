@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SMSsenderAPI.Models;
 using SMSsenderAPI.Services;
 
@@ -6,6 +7,7 @@ namespace SMSsenderAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")] //ავტორიზაცია
     public sealed class EvaluationsController : ControllerBase
     {
         private readonly IEvaluationService _evaluationService;
